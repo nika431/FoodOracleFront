@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food Oracle</title>
+
+    <!-- === CSS LIBRARIES (Styles) === -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>🍽️ Food Oracle</h1>
+      <p>Your intelligent pantry assistant.</p>
+
+      <form id="food-form">
+        <input type="text" id="Name" placeholder="Food name" required />
+        <input
+          type="number"
+          id="quantity"
+          placeholder="Quantity"
+          min="1"
+          required
+        />
+        <input type="text" id="expiryDate" placeholder="Expiry Date" />
+        <button type="submit" id="Add">Add</button>
+      </form>
+
+      <div id="controls-toolbar">
+        <input type="text" id="SearchBar" placeholder="🔍 Search Items" />
+        <div class="sort-buttons">
+          <button type="button" id="sort-by-date">Sort By Date</button>
+          <button type="button" id="sort-by-name">Sort By Name</button>
+        </div>
+      </div>
+
+      <div id="item-list" class="item-list"></div>
+    </div>
+
+    <!-- === JAVASCRIPT LIBRARIES (Functionality) === -->
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+    <script src="script.js"></script>
+  </body>
+</html>

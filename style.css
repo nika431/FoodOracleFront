@@ -1,0 +1,268 @@
+/* ======================================= */
+/* ===== 1. General & Root Styles ===== */
+/* ======================================= */
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* ======================================= */
+/* ===== 2. Layout & Container ===== */
+/* ======================================= */
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ======================================= */
+/* ===== 3. Typography ===== */
+/* ======================================= */
+h1 {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+p {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #666;
+}
+
+/* ======================================= */
+/* ===== 4. Form & Input Styles ===== */
+/* ======================================= */
+form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: #e6e6e6;
+  margin-left: 10px;
+}
+
+.edit-input {
+  width: 95%;
+  padding: 8px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#food-form input {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+#food-form input:focus {
+  outline: none;
+  border-color: #1abc9c;
+  box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
+}
+
+#controls-toolbar input {
+  width: 480px;
+}
+
+/* ======================================= */
+/* ===== 5. Item List & Card Styles ===== */
+/* ======================================= */
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.item-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.item-info a {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.item-info p {
+  margin: 5px 0;
+}
+
+/* ======================================= */
+/* ===== 6. Button Styles ===== */
+/* ======================================= */
+
+button {
+  background-color: #1abc9c;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#controls-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sort-buttons button {
+  margin-left: 10px;
+}
+#controls-toolbar #sort-by-name {
+  background-color: white;
+  color: grey;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+#controls-toolbar #sort-by-date {
+  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  justify-content: center;
+  line-height: 1em;
+  padding: 6px;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#controls-toolbar #sort-by-date:active,
+#controls-toolbar #sort-by-date:hover {
+  outline: 0;
+}
+
+#controls-toolbar #sort-by-date .text {
+  background-color: rgb(5, 6, 45);
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: 300ms;
+}
+
+#controls-toolbar #sort-by-date:hover .text {
+  background: none;
+}
+
+@media (min-width: 768px) {
+  #controls-toolbar #sort-by-date {
+    font-size: 16px;
+    min-width: 130px;
+  }
+}
+#controls-toolbar #sort-by-name:hover {
+  box-shadow: 0 2px 6px rgba(26, 188, 156, 0.6);
+}
+.sort-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+/* Button for adding a food item in the form */
+#Add {
+  margin-left: 10px;
+  height: 44px;
+  width: auto;
+  padding: 0px 20px;
+  font-weight: bold;
+}
+
+.item-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-buttons button {
+  width: 80px;
+}
+
+/* Specific button styles (Delete, Edit, Save, etc.) */
+.btn-edit {
+  background-color: #3498db;
+}
+
+.btn-delete {
+  background-color: #e74c3c;
+}
+
+.btn-save {
+  background-color: #2ecc71;
+}
+
+.btn-cancel {
+  background-color: #95a5a6;
+}
+:root {
+  --fresh-color: #2ecc71; 
+  --soon-color: #f1c40f;  
+  --expired-color: #e74c3c; /
+}
+
+.item {
+  position: relative;
+  overflow: hidden; 
+}
+
+.item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 8px; 
+  height: 100%; 
+  transition: background-color 0.3s ease;
+}
+
+.item.status-fresh::before {
+  background-color: var(--fresh-color);
+}
+
+.item.status-expiring-soon::before {
+  background-color: var(--soon-color);
+}
+
+.item.status-expired::before {
+  background-color: var(--expired-color);
+  opacity: 0.7; 
+}
