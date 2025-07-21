@@ -6,11 +6,10 @@
     <title>Food Oracle</title>
 
     <!-- === CSS LIBRARIES (Styles) === -->
-
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
@@ -29,7 +28,31 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container">
+    <!-- Auth buttons -->
+    <div id="authButtons">
+      <button id="registerBtn">Register</button>
+      <button id="loginBtn">Login</button>
+
+      <!-- Registration Form -->
+      <div id="registerForm" style="display: none">
+        <h3>Register</h3>
+        <input type="text" id="regUsername" placeholder="Username" />
+        <input type="password" id="regPassword" placeholder="Password" />
+        <button id="submitRegister">Submit</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginForm" style="display: none">
+        <h3>Login</h3>
+        <input type="text" id="loginUsername" placeholder="Username" />
+        <input type="password" id="loginPassword" placeholder="Password" />
+        <button id="submitLogin">Login</button>
+      </div>
+    </div>
+    <div id="logout">
+      <button id="logoutBtn" style="display: none">Logout</button>
+    </div>
+    <div class="container" style="display: none">
       <h1>🍽️ Food Oracle</h1>
       <p>Your intelligent pantry assistant.</p>
 
@@ -55,6 +78,12 @@
       </div>
 
       <div id="item-list" class="item-list"></div>
+
+      <div id="pagination-controls">
+        <button type="button" id="prevBtn" disabled>&#8592;</button>
+        <span id="pageIndicator">Page 1</span>
+        <button type="button" id="nextBtn" disabled>&#8594;</button>
+      </div>
     </div>
 
     <!-- === JAVASCRIPT LIBRARIES (Functionality) === -->
@@ -68,6 +97,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
   </body>
 </html>

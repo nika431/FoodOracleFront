@@ -234,14 +234,14 @@ button {
   background-color: #95a5a6;
 }
 :root {
-  --fresh-color: #2ecc71; 
-  --soon-color: #f1c40f;  
-  --expired-color: #e74c3c; /
+  --fresh-color: #2ecc71;
+  --soon-color: #f1c40f;
+  --expired-color: #e74c3c;
 }
 
 .item {
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .item::before {
@@ -249,8 +249,8 @@ button {
   position: absolute;
   left: 0;
   top: 0;
-  width: 8px; 
-  height: 100%; 
+  width: 8px;
+  height: 100%;
   transition: background-color 0.3s ease;
 }
 
@@ -264,5 +264,94 @@ button {
 
 .item.status-expired::before {
   background-color: var(--expired-color);
-  opacity: 0.7; 
+  opacity: 0.7;
+}
+#pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#pagination-controls button {
+  margin: 10px 10px;
+  padding: 6px 12px;
+  font-size: 16px;
+}
+.disabled-btn {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+}
+#authButtons {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 60px 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+#authorbtn,
+#loginBtn,
+#registerBtn {
+  margin: 20px;
+  padding: 12px 30px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+#registerForm,
+#loginForm {
+  background-color: #f7f7f7;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#registerForm h3,
+#loginForm h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+#registerForm input,
+#loginForm input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#registerForm button,
+#loginForm button {
+  width: 100%;
+  padding: 12px;
+  background-color: #00b09b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+#registerForm button:hover,
+#loginForm button:hover {
+  background-color: #00917a;
+}
+.visible-btn {
+  display: block;
+  text-align: right;
+  margin: 20px;
+}
+.hidden {
+  display: none;
 }

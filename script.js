@@ -1,8 +1,12 @@
 const API_BASE_URL = "https://localhost:7249/api/food";
 let fp;
 let currentSearchQuery = "";
-
+let currentPage = 1;
+let pageSize = 5;
+let totalPages = 1;
 let currentSortBy = "date";
+const TOKEN_KEY = "jwtToken";
+const token = localStorage.getItem(TOKEN_KEY);
 
 document.addEventListener("DOMContentLoaded", function () {
   fp = flatpickr("#expiryDate", {
@@ -12,7 +16,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   setupEventListeners();
-  loadItems();
+  if (localStorage.getItem(TOKEN_KEY)) {
+    loadItems();
+  }
 });
 
 function showToast(message, type = "success") {
@@ -53,7 +59,10 @@ function setupEventListeners() {
 
     fetch(API_BASE_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+      },
       body: JSON.stringify(item),
     })
       .then((res) => {
@@ -66,7 +75,7 @@ function setupEventListeners() {
         form.reset();
         fp.clear();
       })
-      .catch((err) => console.error("Error adding item:", err));
+      .catch((err) => showToast("Error adding item: " + err.message, "error"));
   });
 
   document.getElementById("sort-by-date").addEventListener("click", () => {
@@ -80,6 +89,104 @@ function setupEventListeners() {
   });
 
   document.getElementById("SearchBar").addEventListener("keyup", handleSearch);
+
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      loadItems();
+    }
+  });
+
+  document.getElementById("prevBtn").addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      loadItems();
+    }
+  });
+
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem(TOKEN_KEY);
+    updateUI();
+    showToast("Logged out successfully!");
+    document.querySelector(".container").style.display = "none";
+    document.getElementById("authButtons").style.display = "block";
+  });
+
+  document.getElementById("registerBtn").addEventListener("click", () => {
+    document.getElementById("registerForm").style.display = "block";
+    document.getElementById("loginForm").style.display = "none";
+  });
+
+  document.getElementById("loginBtn").addEventListener("click", () => {
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("registerForm").style.display = "none";
+  });
+
+  document
+    .getElementById("submitRegister")
+    .addEventListener("click", async () => {
+      const usernameInput = document.getElementById("regUsername");
+      const passwordInput = document.getElementById("regPassword");
+
+      const username = usernameInput.value;
+      const password = passwordInput.value;
+
+      await fetch("https://localhost:7249/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ Username: username, Password: password }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Registration failed");
+          showToast("Registered successfully! Now log in.");
+          document.getElementById("registerForm").style.display = "none";
+        })
+        .catch((err) => {
+          showToast(err.message, "error");
+        })
+        .finally(() => {
+          usernameInput.value = "";
+          passwordInput.value = "";
+        });
+    });
+
+  document.getElementById("submitLogin").addEventListener("click", async () => {
+    const usernameInput = document.getElementById("loginUsername");
+    const passwordInput = document.getElementById("loginPassword");
+
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    try {
+      const res = await fetch("https://localhost:7249/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ Username: username, Password: password }),
+      });
+
+      const data = await res.json();
+
+      if (!data.token) throw new Error("Login failed");
+
+      localStorage.setItem(TOKEN_KEY, data.token);
+
+      const loginForm = document.getElementById("loginForm");
+      if (loginForm) {
+        loginForm.style.display = "none";
+
+        updateUI();
+        showToast("Login successful!");
+        document.querySelector(".container").style.display = "block";
+        document.getElementById("logout")?.classList.add("visible-btn");
+        document.getElementById("authButtons")?.classList.add("hidden");
+      }
+    } catch (err) {
+      showToast(err.message || "Something went wrong", "error");
+    } finally {
+      usernameInput.value = "";
+      passwordInput.value = "";
+    }
+  });
 }
 
 function handleSearch() {
@@ -89,25 +196,33 @@ function handleSearch() {
 
 async function loadItems() {
   try {
-    const params = new URLSearchParams();
-    params.append("sortBy", currentSortBy);
-
-    if (currentSearchQuery) {
-      params.append("searchQuery", currentSearchQuery);
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) {
+      showToast("Please log in to view items.", "error");
+      return;
     }
-    const url = `${API_BASE_URL}?${params.toString()}`;
 
-    const res = await fetch(url);
+    const url = `${API_BASE_URL}?sortBy=${currentSortBy}&searchQuery=${encodeURIComponent(
+      currentSearchQuery
+    )}&pageNumber=${currentPage}&pageSize=${pageSize}`;
+
+    const res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
     const data = await res.json();
-
+    totalPages = Math.ceil(data.totalCount / pageSize);
+    const items = data.items;
     const list = document.getElementById("item-list");
     list.innerHTML = "";
 
-    data.forEach((item) => {
+    items.forEach((item) => {
       const itemDiv = document.createElement("div");
-      itemDiv.className = "item";
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const expiry = new Date(item.expiryDate);
@@ -132,9 +247,22 @@ async function loadItems() {
     });
 
     feather.replace();
+
+    document.getElementById(
+      "pageIndicator"
+    ).textContent = `Page ${currentPage}`;
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage >= totalPages;
+
+    prevBtn.classList.toggle("disabled-btn", currentPage === 1);
+    nextBtn.classList.toggle("disabled-btn", currentPage >= totalPages);
   } catch (err) {
-    console.error("Error loading items:", err);
-    showToast(`Failed to load items: ${err.message}`, "error");
+    const message =
+      err instanceof Error ? err.message : "Unknown error occurred";
+    showToast(`Failed to load items: ${message}`, "error");
   }
 }
 
@@ -215,7 +343,10 @@ function saveEdit(id) {
 
   fetch(`${API_BASE_URL}/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+    },
     body: JSON.stringify(updatedItem),
   })
     .then((res) => {
@@ -223,21 +354,35 @@ function saveEdit(id) {
       showToast("Item updated successfully!");
       loadItems();
     })
-    .catch((err) => console.error("Error updating item:", err));
+    .catch((err) => showToast("Error updating item: " + err.message, "error"));
 }
 
 function deleteItem(id) {
-  if (!confirm("Are you sure you want to delete this item?")) {
-    return;
-  }
-
   fetch(`${API_BASE_URL}/${id}`, {
     method: "DELETE",
+    headers: { Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}` },
   })
     .then((res) => {
       if (!res.ok) throw new Error("Failed to delete item.");
       showToast("Item deleted!");
       loadItems();
     })
-    .catch((err) => console.error("Error deleting item:", err));
+    .catch((err) => showToast("Error deleting item: " + err.message, "error"));
+}
+
+function updateUI() {
+  const isLoggedIn = !!localStorage.getItem(TOKEN_KEY);
+
+  document
+    .getElementById("appContainer")
+    ?.style.setProperty("display", isLoggedIn ? "block" : "none");
+  document
+    .getElementById("logoutBtn")
+    ?.style.setProperty("display", isLoggedIn ? "inline-block" : "none");
+  document
+    .getElementById("loginBtn")
+    ?.style.setProperty("display", isLoggedIn ? "none" : "inline-block");
+  document
+    .getElementById("registerBtn")
+    ?.style.setProperty("display", isLoggedIn ? "none" : "inline-block");
 }
