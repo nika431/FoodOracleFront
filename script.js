@@ -108,18 +108,34 @@ function setupEventListeners() {
     localStorage.removeItem(TOKEN_KEY);
     updateUI();
     showToast("Logged out successfully!");
-    document.querySelector(".container").style.display = "none";
-    document.getElementById("authButtons").style.display = "block";
   });
 
   document.getElementById("registerBtn").addEventListener("click", () => {
     document.getElementById("registerForm").style.display = "block";
     document.getElementById("loginForm").style.display = "none";
+
+    const registerBtn = document.getElementById("registerBtn");
+    const loginBtn = document.getElementById("loginBtn");
+
+    registerBtn.classList.add("active");
+    registerBtn.classList.remove("nonActive");
+
+    loginBtn.classList.add("nonActive");
+    loginBtn.classList.remove("active");
   });
 
   document.getElementById("loginBtn").addEventListener("click", () => {
     document.getElementById("loginForm").style.display = "block";
     document.getElementById("registerForm").style.display = "none";
+
+    const registerBtn = document.getElementById("registerBtn");
+    const loginBtn = document.getElementById("loginBtn");
+
+    loginBtn.classList.add("active");
+    loginBtn.classList.remove("nonActive");
+
+    registerBtn.classList.add("nonActive");
+    registerBtn.classList.remove("active");
   });
 
   document
@@ -137,7 +153,7 @@ function setupEventListeners() {
         body: JSON.stringify({ Username: username, Password: password }),
       })
         .then((res) => {
-          if (!res.ok) throw new Error("Registration failed");
+          if (!res.ok) throw new Error("This username is already taken.");
           showToast("Registered successfully! Now log in.");
           document.getElementById("registerForm").style.display = "none";
         })
@@ -163,7 +179,21 @@ function setupEventListeners() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ Username: username, Password: password }),
       });
+      if (!res.ok) {
+        const errorData = await res.json();
 
+        if (res.status === 401) {
+          showToast("Incorrect username or password (type better 😑)", "error");
+        } else if (res.status === 400) {
+          showToast(
+            "User not registered (how are you trying to log in without registering?). Please register first.",
+            "error"
+          );
+        } else {
+          showToast(errorData.error || "Unknown error occurred", "error");
+        }
+        return;
+      }
       const data = await res.json();
 
       if (!data.token) throw new Error("Login failed");
@@ -176,9 +206,7 @@ function setupEventListeners() {
 
         updateUI();
         showToast("Login successful!");
-        document.querySelector(".container").style.display = "block";
         document.getElementById("logout")?.classList.add("visible-btn");
-        document.getElementById("authButtons")?.classList.add("hidden");
       }
     } catch (err) {
       showToast(err.message || "Something went wrong", "error");
@@ -374,7 +402,7 @@ function updateUI() {
   const isLoggedIn = !!localStorage.getItem(TOKEN_KEY);
 
   document
-    .getElementById("appContainer")
+    .querySelector(".container")
     ?.style.setProperty("display", isLoggedIn ? "block" : "none");
   document
     .getElementById("logoutBtn")
@@ -385,4 +413,7 @@ function updateUI() {
   document
     .getElementById("registerBtn")
     ?.style.setProperty("display", isLoggedIn ? "none" : "inline-block");
+  document
+    .getElementById("authButtons")
+    .style.setProperty("display", isLoggedIn ? "none" : "block");
 }

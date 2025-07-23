@@ -355,3 +355,12 @@ button {
 .hidden {
   display: none;
 }
+.active {
+  color: #f7f7f7;
+  background-color: #00b09b;
+}
+
+.nonActive {
+  color: #999;
+  background-color: #f0f0f0;
+}
