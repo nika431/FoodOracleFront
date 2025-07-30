@@ -106,6 +106,7 @@ function setupEventListeners() {
 
   document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem(TOKEN_KEY);
+    document.querySelector(".usersList").style.display = "none";
     updateUI();
     showToast("Logged out successfully!");
   });
@@ -156,6 +157,7 @@ function setupEventListeners() {
           if (!res.ok) throw new Error("This username is already taken.");
           showToast("Registered successfully! Now log in.");
           document.getElementById("registerForm").style.display = "none";
+          registerBtn.classList.add("nonActive");
         })
         .catch((err) => {
           showToast(err.message, "error");
@@ -207,6 +209,11 @@ function setupEventListeners() {
         updateUI();
         showToast("Login successful!");
         document.getElementById("logout")?.classList.add("visible-btn");
+        document.getElementById("greeting").style.display = "block";
+        document.getElementById("greeting").classList.add("h1Active");
+        document.getElementById(
+          "greeting"
+        ).textContent = `Welcome back, ${username}!`;
       }
     } catch (err) {
       showToast(err.message || "Something went wrong", "error");
@@ -215,6 +222,58 @@ function setupEventListeners() {
       passwordInput.value = "";
     }
   });
+  document
+    .getElementById("showUsersBtn")
+    .addEventListener("click", async () => {
+      const showUsersBtn = document.getElementById("showUsersBtn");
+      const usersList = document.querySelector(".usersList");
+      const usersListUI = document.getElementById("userListItems");
+
+      if (showUsersBtn.textContent === "Show Users") {
+        usersList.style.display = "block";
+        showUsersBtn.textContent = "Hide Users";
+
+        try {
+          const username = "someUsername";
+          const res = await fetch("https://localhost:7249/api/user", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+            },
+            body: JSON.stringify(username),
+          });
+
+          if (!res.ok) throw new Error("Failed to fetch users.");
+
+          const users = await res.json();
+          usersListUI.innerHTML = "";
+          users.forEach((username) => {
+            const li = document.createElement("li");
+            li.classList.add("user-item");
+
+            const nameSpan = document.createElement("span");
+            nameSpan.textContent = username;
+
+            const inspectBtn = document.createElement("button");
+            inspectBtn.textContent = "Inspect";
+            inspectBtn.className = "inspectBtn";
+            inspectBtn.dataset.username = username;
+
+            li.appendChild(nameSpan);
+            li.appendChild(inspectBtn);
+            document.getElementById("userListItems").appendChild(li);
+          });
+
+          const usersContainer = document.getElementById("usersContainer");
+        } catch (err) {
+          showToast("Error fetching users: " + err.message, "error");
+        }
+      } else {
+        usersList.style.display = "none";
+        showUsersBtn.textContent = "Show Users";
+      }
+    });
 }
 
 function handleSearch() {
@@ -416,4 +475,7 @@ function updateUI() {
   document
     .getElementById("authButtons")
     .style.setProperty("display", isLoggedIn ? "none" : "block");
+  document
+    .querySelector(".show-users")
+    ?.style.setProperty("display", isLoggedIn ? "block" : "none");
 }

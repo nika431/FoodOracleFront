@@ -49,43 +49,57 @@
         <button id="submitLogin">Login</button>
       </div>
     </div>
+    <h1 id="greeting" style="display: none">Welcome back</h1>
     <div id="logout">
       <button id="logoutBtn" style="display: none">Logout</button>
     </div>
-    <div class="container" style="display: none">
-      <h1>🍽️ Food Oracle</h1>
-      <p>Your intelligent pantry assistant.</p>
+    <div class="content-wrapper">
+      <div class="left-side">
+        <div class="show-users" style="display: none">
+          <button id="showUsersBtn">Show Users</button>
+        </div>
+        <div class="usersList" style="display: none">
+          <h3>👥Users</h3>
+          <ul id="userListItems"></ul>
+        </div>
+        <div class="inspectResults" style="margin-top: 20px"></div>
+      </div>
+      <div class="container" style="display: none">
+        <h1>🍽️ Food Oracle</h1>
+        <p>
+          app that is created to help people reduce the amount of food that is
+          wasted "don't waste food"
+        </p>
+        <form id="food-form">
+          <input type="text" id="Name" placeholder="Food name" required />
+          <input
+            type="number"
+            id="quantity"
+            placeholder="Quantity"
+            min="1"
+            required
+          />
+          <input type="text" id="expiryDate" placeholder="Expiry Date" />
+          <button type="submit" id="Add">Add</button>
+        </form>
 
-      <form id="food-form">
-        <input type="text" id="Name" placeholder="Food name" required />
-        <input
-          type="number"
-          id="quantity"
-          placeholder="Quantity"
-          min="1"
-          required
-        />
-        <input type="text" id="expiryDate" placeholder="Expiry Date" />
-        <button type="submit" id="Add">Add</button>
-      </form>
+        <div id="controls-toolbar">
+          <input type="text" id="SearchBar" placeholder="🔍 Search Items" />
+          <div class="sort-buttons">
+            <button type="button" id="sort-by-date">Sort By Date</button>
+            <button type="button" id="sort-by-name">Sort By Name</button>
+          </div>
+        </div>
 
-      <div id="controls-toolbar">
-        <input type="text" id="SearchBar" placeholder="🔍 Search Items" />
-        <div class="sort-buttons">
-          <button type="button" id="sort-by-date">Sort By Date</button>
-          <button type="button" id="sort-by-name">Sort By Name</button>
+        <div id="item-list" class="item-list"></div>
+
+        <div id="pagination-controls">
+          <button type="button" id="prevBtn" disabled>&#8592;</button>
+          <span id="pageIndicator">Page 1</span>
+          <button type="button" id="nextBtn" disabled>&#8594;</button>
         </div>
       </div>
-
-      <div id="item-list" class="item-list"></div>
-
-      <div id="pagination-controls">
-        <button type="button" id="prevBtn" disabled>&#8592;</button>
-        <span id="pageIndicator">Page 1</span>
-        <button type="button" id="nextBtn" disabled>&#8594;</button>
-      </div>
     </div>
-
     <!-- === JAVASCRIPT LIBRARIES (Functionality) === -->
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
