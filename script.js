@@ -109,6 +109,7 @@ function setupEventListeners() {
     document.querySelector(".usersList").style.display = "none";
     updateUI();
     showToast("Logged out successfully!");
+    document.getElementById("greeting").style.display = "none";
   });
 
   document.getElementById("registerBtn").addEventListener("click", () => {
@@ -214,6 +215,7 @@ function setupEventListeners() {
         document.getElementById(
           "greeting"
         ).textContent = `Welcome back, ${username}!`;
+        loginBtn.classList.add("nonActive");
       }
     } catch (err) {
       showToast(err.message || "Something went wrong", "error");
@@ -404,7 +406,18 @@ function editItem(item) {
 }
 
 async function cancelEdit(id) {
-  const res = await fetch(`${API_BASE_URL}/${id}`);
+  const res = await fetch(`${API_BASE_URL}/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    console.error(`Failed to fetch item ${id}. Status: ${res.status}`);
+    return;
+  }
+
   const item = await res.json();
   const itemDiv = document.getElementById(`item-${id}`);
   itemDiv.innerHTML = createItemHtml(item);
