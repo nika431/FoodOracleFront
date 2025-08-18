@@ -6,6 +6,7 @@ let pageSize = 5;
 let totalPages = 1;
 let currentSortBy = "date";
 const TOKEN_KEY = "jwtToken";
+let currentUsername = "";
 function getToken() {
   return localStorage.getItem(TOKEN_KEY);
 }
@@ -149,6 +150,7 @@ document
     const usernameInput = document.getElementById("regUsername");
     const passwordInput = document.getElementById("regPassword");
 
+    currentUsername = usernameInput.value;
     const username = usernameInput.value;
     const password = passwordInput.value;
 
@@ -254,24 +256,36 @@ document.getElementById("showUsersBtn").addEventListener("click", async () => {
       const users = await res.json();
       usersListUI.innerHTML = "";
 
-      users.forEach((user) => {
+      const currentUserId = localStorage.getItem("customerId");
+
+      const currentUser = users.find((u) => u.id == currentUserId);
+      if (currentUser) {
         const li = document.createElement("li");
-        li.classList.add("user-item");
-
-        const nameSpan = document.createElement("span");
-        nameSpan.textContent = user.username;
-
-        const inspectBtn = document.createElement("button");
-        inspectBtn.textContent = "Inspect";
-        inspectBtn.className = "inspectBtn";
-        inspectBtn.dataset.username = user.username;
-
-        li.appendChild(nameSpan);
-        li.appendChild(inspectBtn);
+        li.classList.add("user-item", "current-user");
+        li.textContent = "You";
         usersListUI.appendChild(li);
+      }
 
-        attachInspectListener(inspectBtn, user.id, user.username);
-      });
+      users
+        .filter((u) => u.id != currentUserId)
+        .forEach((user) => {
+          const li = document.createElement("li");
+          li.classList.add("user-item");
+
+          const nameSpan = document.createElement("span");
+          nameSpan.textContent = user.username;
+
+          const inspectBtn = document.createElement("button");
+          inspectBtn.textContent = "Inspect";
+          inspectBtn.className = "inspectBtn";
+          inspectBtn.dataset.username = user.username;
+
+          li.appendChild(nameSpan);
+          li.appendChild(inspectBtn);
+          usersListUI.appendChild(li);
+
+          attachInspectListener(inspectBtn, user.id, user.username);
+        });
     } catch (err) {
       showToast("Error fetching users: " + err.message, "error");
     }
