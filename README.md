@@ -23,3 +23,25 @@ We can also add expiry warnings when a food item has less than 7 days left. This
 Backend: C# ASP.NET Core Web API (.NET 8.0), using some NuGet packages  
 Frontend: HTML, CSS, JavaScript (no frameworks used)  
 Other Tools: Git, GitHub
+
+    #screenshots
+<img width="1917" height="939" alt="Screenshot 2025-08-19 183400" src="https://github.com/user-attachments/assets/8c4aa2fb-cee3-4691-b5ae-ef36460a4f86" />
+<img width="1919" height="941" alt="Screenshot 2025-08-19 183340" src="https://github.com/user-attachments/assets/f7278df0-6b1d-4cb9-9457-496ec54c325d" />
+<img width="1919" height="944" alt="Screenshot 2025-08-19 183313" src="https://github.com/user-attachments/assets/417017c9-b53e-469a-9d98-1972351c1775" />
+<img width="1919" height="941" alt="Screenshot 2025-08-19 183239" src="https://github.com/user-attachments/assets/72626f14-1b13-47b5-af67-6acc00e0f14d" />
+<img width="1913" height="936" alt="Screenshot 2025-08-19 183223" src="https://github.com/user-attachments/assets/4ef0f099-bf94-4ae5-a943-59eb924865c7" />
+<img width="1919" height="941" alt="Screenshot 2025-08-19 183155" src="https://github.com/user-attachments/assets/8abe5479-d6c7-46fe-998c-83912cb052dd" />
+  
+    #installation 
+1. Download the project  
+   - Clone the repository:  
+     ```bash
+     git clone https://github.com/nika431/FoodOracleFront.git
+     ```  
+   - Or download the ZIP from GitHub and extract it  
+
+2. Open the project in **Visual Studio**  
+
+3. When prompted, agree to **"Trust the author"** to allow full access and run the project  
+
+4. Run the project. The default route is:
