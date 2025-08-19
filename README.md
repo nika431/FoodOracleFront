@@ -44,4 +44,4 @@ Other Tools: Git, GitHub
 
 3. When prompted, agree to **"Trust the author"** to allow full access and run the project  
 
-4. Run the project. The default route is:
+4. Run the project. The default route is: https
